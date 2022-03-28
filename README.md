@@ -23,5 +23,5 @@ pip3 install -r requirements.txt
        .  
        .  
 │   ├───class  
-|   |       img1.jpg  
-|   |       img2.jpg  
+│   │       img1.jpg  
+│   │       img2.jpg  
