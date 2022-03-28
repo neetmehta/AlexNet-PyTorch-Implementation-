@@ -4,8 +4,6 @@ Implementation of AlexNet, from paper
 See: https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf
 """
 
-from ast import arg
-from pickletools import optimize
 import torch
 import torch.nn as nn  
 from torch.utils.data import DataLoader, random_split
