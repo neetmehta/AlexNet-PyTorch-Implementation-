@@ -27,7 +27,7 @@ pip3 install -r requirements.txt
 │   │       img2.jpg  
 
 ## Training
-To train model below is the example of the command. `--data_dir` and `checkpoint_dir` arguments are mandatory and other arguments are optional. If not specified model will assume default arguments.
+To train model below is the example of the command. `--data_dir` and `--checkpoint_dir` arguments are mandatory and other arguments are optional. If not specified model will assume default arguments.
 ```bash
 python train.py --data_dir .\Data\ --ckpt_dir .\checkpoints\ --classes 2 --batch_size 128 --epochs 90 --train_split 0.8 --lr 0.0001
 ```
