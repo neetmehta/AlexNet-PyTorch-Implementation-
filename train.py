@@ -40,21 +40,18 @@ def load_checkpoint(ckpt_path):
 # Create a model based on existing model or new model
 def get_model(use_pretrained=False, ckpt_path=None):
     
-    device = "cuda" if torch.cuda.is_available() else "cpu"
     alexnet = AlexNet(NUM_CLASSES)
     optimizer = torch.optim.Adam(params=alexnet.parameters(), lr=LEARNING_RATE)
     if use_pretrained:
         ckpt = load_checkpoint(ckpt_path)
         alexnet.load_state_dict(ckpt["model_state_dict"])
         optimizer.load_state_dict(ckpt["optimizer_state_dict"])
-        alexnet = alexnet.to(device)
 
     return alexnet, optimizer
 
 # Training loop
 def train(train_loader, model, loss_function, optimizer, save_ckpt=True):
     
-    device = "cuda" if torch.cuda.is_available() else "cpu"
     last_ckpt = None
     
     for epoch in range(NUM_EPOCHS):
@@ -85,29 +82,54 @@ def train(train_loader, model, loss_function, optimizer, save_ckpt=True):
             if last_ckpt is not None: os.remove(last_ckpt)
             last_ckpt = os.path.join(CHECKPOINT_DIR, f"alexnet_epoch_{epoch+1}.pth")
 
+    return model
+
+def check_accuracy(loader, model):
+    num_correct = 0
+    num_samples = 0
+    model.eval()
+
+    with torch.no_grad():
+        for x,y in loader:
+            x,y = x.to(device), y.to(device)
+
+            scores = model(x)
+            _, prediction = scores.max(1)
+            num_correct += (prediction==y).sum()
+            num_samples += prediction.size(0)
+
+        print(f"got {num_correct} correct out of {num_samples} with accuracy {float(num_correct)/float(num_samples)*100} %")
+
+    model.train()
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--classes", help="No. of classes", default=2)
     parser.add_argument("--batch_size", help="Batch size", default=128)
     parser.add_argument("--epochs", help="No.of epochs", default=90)
-    parser.add_argument("--train_split", help= "percentage of train set", default=0.8)
+    parser.add_argument("--train_split", help= "percentage of train set", default=0.8, type=float)
     parser.add_argument("--lr", help="Learning rate", default=0.0001)
     parser.add_argument("--ckpt_dir", help="Checkpoint dir", required=True)
     parser.add_argument("--data_dir", help="data dir", required=True)
     args = parser.parse_args()
     
+    
     ## Arguments
     USE_PRETRAINED = True
-    NUM_CLASSES = args.classes
-    BATCH_SIZE = args.batch_size
-    NUM_EPOCHS = args.epochs
-    TRAIN_SPLIT = args.train_split
-    LEARNING_RATE = args.lr
+    NUM_CLASSES = int(args.classes)
+    BATCH_SIZE = int(args.batch_size)
+    NUM_EPOCHS = int(args.epochs)
+    TRAIN_SPLIT = float(args.train_split)
+    LEARNING_RATE = float(args.lr)
     CHECKPOINT_DIR = args.ckpt_dir
     DATA_DIR = args.data_dir
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
 
     train_loader, test_loader = load_data(DATA_DIR)
     model, optimizer = get_model()
     loss_function = nn.CrossEntropyLoss()
-    train(train_loader=train_loader, model=model, loss_function=loss_function, optimizer=optimizer)
+    model = train(train_loader=train_loader, model=model, loss_function=loss_function, optimizer=optimizer)
+
+    check_accuracy(test_loader, model)
