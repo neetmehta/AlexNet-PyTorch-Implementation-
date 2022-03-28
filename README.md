@@ -14,8 +14,14 @@ pip3 install -r requirements.txt
 ## Dataset structure
 ├───Data  
 │   ├───cats  
+│   │       img1.jpg  
+│   │       img2.jpg  
+│   │  
 │   ├───dogs  
-│   .  
-│   .  
-│   .  
-│   ├───classes  
+│   │       img1.jpg  
+│   │       img2.jpg  
+       .  
+       .  
+│   ├───class  
+|   |       img1.jpg  
+|   |       img2.jpg  
