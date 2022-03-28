@@ -11,3 +11,11 @@ This is a simple implementaiton of AlexNet to classify cats and dogs, as introdu
 ```bash
 pip3 install -r requirements.txt
 ```
+## Dataset structure
+├───Data
+│   ├───cats
+│   ├───dogs
+│   .
+│   .
+│   .
+│   ├───classes
