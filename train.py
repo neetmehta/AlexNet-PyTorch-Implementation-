@@ -1,3 +1,9 @@
+"""
+Implementation of AlexNet, from paper
+"ImageNet Classification with Deep Convolutional Neural Networks" by Alex Krizhevsky et al.
+See: https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf
+"""
+
 from ast import arg
 from pickletools import optimize
 import torch
@@ -11,6 +17,7 @@ from tqdm import tqdm
 
 from model import AlexNet
 
+# Create Dataloader object
 def load_data(data_dir):
     image_transforms = transforms.Compose([transforms.Resize((227,227)), transforms.ToTensor()])
     dataset = ImageFolder(data_dir, transform=image_transforms)
@@ -23,6 +30,7 @@ def load_data(data_dir):
     
     return train_loader, test_loader
 
+# Load Checkpoint
 def load_checkpoint(ckpt_path):
     checkpoint = os.listdir(ckpt_path)
     print(checkpoint)
@@ -31,6 +39,7 @@ def load_checkpoint(ckpt_path):
     checkpoint_dict = torch.load(checkpoint_path)
     return checkpoint_dict
 
+# Create a model based on existing model or new model
 def get_model(use_pretrained=False, ckpt_path=None):
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -44,6 +53,7 @@ def get_model(use_pretrained=False, ckpt_path=None):
 
     return alexnet, optimizer
 
+# Training loop
 def train(train_loader, model, loss_function, optimizer, save_ckpt=True):
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -89,6 +99,7 @@ if __name__ == "__main__":
     parser.add_argument("--data_dir", help="data dir", required=True)
     args = parser.parse_args()
     
+    ## Arguments
     USE_PRETRAINED = True
     NUM_CLASSES = args.classes
     BATCH_SIZE = args.batch_size
