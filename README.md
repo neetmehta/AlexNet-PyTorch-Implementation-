@@ -27,3 +27,6 @@ pip3 install -r requirements.txt
 │   │       img2.jpg  
 
 ## Training
+```bash
+python train.py --data_dir .\Data\ --ckpt_dir .\checkpoints\ --classes 2 --batch_size 128 --epochs 90 --train_split 0.8 --lr 0.0001
+```
