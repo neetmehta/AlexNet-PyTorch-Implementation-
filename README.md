@@ -15,7 +15,7 @@ pip3 install -r requirements.txt
 ├───Data  
 │   ├───cats  
 │   ├───dogs  
-│   .
-│   .
-│   .
-│   ├───classes
+│   .  
+│   .  
+│   .  
+│   ├───classes  
